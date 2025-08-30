@@ -16,20 +16,23 @@
 <body>
 
 <main class="container">
-  <h1>数当てゲーム (1~20)</h1>
+  <h1>数当てゲーム (1~100)</h1>
   
   <div id="guessGame">
     <label for="guessField">予想: </label>
-    <input type="number" min="1" max="20" id="guessField">
+    <input type="number" min="1" max="100" id="guessField">
     <input type="submit" value="予想を入力" id="guessSubmit">
     <p id="guessResult"></p>
   </div>
 </main>
 
 <script>
-  // 1から20までのランダムな整数を生成し、コンソールにログを出力
-  let answerNumber = Math.floor(Math.random() * 20) + 1;
+  // 1から100までのランダムな整数を生成し、コンソールにログを出力
+  let answerNumber = Math.floor(Math.random() * 100) + 1;
   console.log('正解は' + answerNumber);
+
+  let attempts = 0;       // 試行回数
+  let maxAttempts = 5;    // 最大試行回数
 
   // 数値入力フィールドを取得
   let guessField = document.querySelector('#guessField');
@@ -39,6 +42,10 @@
 
   // 結果を表示する要素を取得
   let guessResult = document.querySelector('#guessResult');
+
+  // 入力回数をカウント
+  let userGuess = Number(guessField.value);
+  attempts++;
 
   // ユーザーの入力をチェックし、結果を表示
   function checkGuess() {
@@ -52,10 +59,19 @@
     } else if (userGuess > answerNumber) { // ユーザの入力が正解より大きい
       guessResult.textContent = 'もっと小さいです';
     }
-  }
+
+    if (attempts >= maxAttempts) {
+      guessResult.textContent = 'ゲームオーバー！正解は ' + answerNumber + ' でした';
+      guessSubmit.disabled = true;
+    }
+
+  // 残り回数を表示
+  remaining.textContent = '残り回数: ' + (maxAttempts - attempts);
 
   // submitがクリックされたときに、checkGuess関数を呼び出す
   guessSubmit.addEventListener('click', checkGuess);
+}
+
 </script>
 
 </body>
